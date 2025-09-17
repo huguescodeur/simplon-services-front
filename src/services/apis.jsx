@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://127.0.0.1:8000/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -72,14 +72,14 @@ api.interceptors.response.use(
         );
 
         if (response.status === 200) {
-          console.log("Token refreshed successfully");
+          // console.log("Token refreshed successfully");
           processQueue(null);
           isRefreshing = false;
 
           return api(originalRequest);
         }
       } catch (refreshError) {
-        console.error("Token refresh failed:", refreshError);
+        // console.error("Token refresh failed:", refreshError);
         processQueue(refreshError, null);
         isRefreshing = false;
 
@@ -208,6 +208,7 @@ export const passwordResetAPI = {
       { withCredentials: true }
     ),
 
+  // Confirmer le nouveau mot de passe
   confirmReset: (token, newPassword, confirmPassword) =>
     axios.post(
       `${API_BASE_URL}/auth/password-reset/confirm/`,

@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }) => {
       dispatch({ type: "SET_USER", payload: response.data });
       return response.data;
     } catch (error) {
-      console.error("Erreur getCurrentUser:", error);
+      // console.error("Erreur getCurrentUser:", error);
       dispatch({ type: "AUTH_ERROR" });
       throw error;
     }
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
       try {
         await getCurrentUser();
       } catch (error) {
-        console.log("Utilisateur non connecté:", error.message);
+        // console.log("Utilisateur non connecté:", error.message);
         dispatch({ type: "AUTH_ERROR" });
       } finally {
         if (mounted) {
@@ -125,24 +125,24 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authAPI.login(credentials);
 
-      console.log("=== APRÈS LOGIN ===");
-      console.log("Response:", response.data);
-      console.log("Cookies après login:", document.cookie);
-      console.log("===================");
+      // console.log("=== APRÈS LOGIN ===");
+      // console.log("Response:", response.data);
+      // console.log("Cookies après login:", document.cookie);
+      // console.log("===================");
 
       // Attendre un court délai pour que les cookies soient bien définis
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       try {
         const userData = await authAPI.getCurrentUser();
-        console.log("✓ getCurrentUser réussie:", userData.data);
+        // console.log("✓ getCurrentUser réussie:", userData.data);
 
         // Dispatch du succès - cela déclenchera automatiquement la redirection
         dispatch({ type: "LOGIN_SUCCESS", payload: userData.data });
 
         return { success: true, message: response.data.message };
       } catch (authError) {
-        console.error("✗ getCurrentUser échouée:", authError);
+        // console.error("✗ getCurrentUser échouée:", authError);
         dispatch({
           type: "LOGIN_ERROR",
           payload: "Échec de l'authentification",
@@ -162,17 +162,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = useCallback(async () => {
-    console.log("=== DÉBUT LOGOUT ===");
+    // console.log("=== DÉBUT LOGOUT ===");
 
     try {
       await authAPI.logout();
-      console.log("✓ Logout API appelé avec succès");
+      // console.log("✓ Logout API appelé avec succès");
     } catch (error) {
-      console.error("✗ Erreur lors de l'appel logout API:", error);
+      // console.error("✗ Erreur lors de l'appel logout API:", error);
     } finally {
       dispatch({ type: "LOGOUT" });
-      console.log("✓ État local nettoyé");
-      console.log("=== FIN LOGOUT ===");
+      // console.log("✓ État local nettoyé");
+      // console.log("=== FIN LOGOUT ===");
     }
   }, []);
 
@@ -182,7 +182,7 @@ export const AuthProvider = ({ children }) => {
       dispatch({ type: "UPDATE_USER", payload: response.data });
       return { success: true, data: response.data };
     } catch (error) {
-      console.error("Erreur updateUser:", error);
+      // console.error("Erreur updateUser:", error);
       const errorMessage =
         error.response?.data?.error ||
         error.response?.data?.email?.[0] ||
@@ -197,7 +197,7 @@ export const AuthProvider = ({ children }) => {
       const response = await authAPI.changePassword(passwordData);
       return { success: true, message: response.data.message };
     } catch (error) {
-      console.error("Erreur changePassword:", error);
+      // console.error("Erreur changePassword:", error);
       const errorMessage =
         error.response?.data?.old_password?.[0] ||
         error.response?.data?.error ||

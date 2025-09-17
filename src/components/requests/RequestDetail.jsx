@@ -38,7 +38,7 @@ const RequestDetail = () => {
     fetchRequestDetail();
   }, [id]);
 
-  console.log("Request Infos:", request);
+  // console.log("Request Infos:", request);
 
   const fetchRequestDetail = async () => {
     try {
@@ -47,7 +47,7 @@ const RequestDetail = () => {
       setRequest(response.data);
     } catch (error) {
       toast.error("Erreur lors du chargement de la demande");
-      console.error("Request detail error:", error);
+      // console.error("Request detail error:", error);
     } finally {
       setLoading(false);
     }
@@ -201,10 +201,10 @@ const RequestDetail = () => {
           );
 
           if (failedUploads.length > 0) {
-            console.error(
-              "Erreurs upload:",
-              failedUploads.map((f) => f.reason)
-            );
+            // console.error(
+            //   "Erreurs upload:",
+            //   failedUploads.map((f) => f.reason)
+            // );
             toast.warning(
               `Demande validée avec succès. ${successfulUploads.length} fichier(s) ajouté(s), ${failedUploads.length} échec(s)`
             );
@@ -214,7 +214,7 @@ const RequestDetail = () => {
             );
           }
         } catch (uploadError) {
-          console.error("Erreur upload fichiers:", uploadError);
+          // console.error("Erreur upload fichiers:", uploadError);
           toast.warning(
             "Demande validée mais erreur lors de l'upload de certains fichiers"
           );
@@ -230,7 +230,7 @@ const RequestDetail = () => {
       fetchRequestDetail();
     } catch (error) {
       toast.error("Erreur lors de la validation");
-      console.error("Validation error:", error);
+      // console.error("Validation error:", error);
     }
   };
 
@@ -251,7 +251,7 @@ const RequestDetail = () => {
       fetchRequestDetail();
     } catch (error) {
       toast.error("Erreur lors du refus");
-      console.error("Validation error:", error);
+      // console.error("Validation error:", error);
     }
   };
 
@@ -281,7 +281,7 @@ const RequestDetail = () => {
       fetchRequestDetail();
     } catch (error) {
       toast.error("Erreur lors de la validation");
-      console.error("Validation error:", error);
+      // console.error("Validation error:", error);
     }
   };
 
@@ -305,7 +305,7 @@ const RequestDetail = () => {
       fetchRequestDetail();
     } catch (error) {
       toast.error("Erreur lors de la mise à jour");
-      console.error("Update rejection error:", error);
+      // console.error("Update rejection error:", error);
     }
   };
 

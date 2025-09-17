@@ -563,7 +563,7 @@ const AttachmentsManager = ({
       const response = await attachmentsAPI.getAttachments(requestId);
       setAttachments(response.data);
     } catch (error) {
-      console.error("Erreur chargement pièces jointes:", error);
+      // console.error("Erreur chargement pièces jointes:", error);
     }
   };
 
@@ -776,7 +776,7 @@ const AttachmentsManager = ({
 
       toast.success("Fichier(s) ajouté(s)");
     } catch (error) {
-      console.error("Erreur upload:", error);
+      // console.error("Erreur upload:", error);
       toast.error(
         `Erreur lors de l'upload: ${
           error.response?.data?.error || error.message
@@ -822,7 +822,7 @@ const AttachmentsManager = ({
       setAttachments((prev) => prev.filter((att) => att.id !== attachmentId));
       toast.success("Pièce jointe supprimée");
     } catch (error) {
-      console.error("Erreur suppression:", error);
+      // console.error("Erreur suppression:", error);
       toast.error("Erreur lors de la suppression");
     }
   };

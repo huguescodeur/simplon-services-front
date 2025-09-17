@@ -120,7 +120,7 @@ const Profile = () => {
       }
     } catch (error) {
       toast.error("Erreur de connexion. Veuillez réessayer.");
-      console.error("Erreur de changement de mot de passe:", error);
+      // console.error("Erreur de changement de mot de passe:", error);
     } finally {
       setLoading(false);
     }

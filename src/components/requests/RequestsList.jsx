@@ -141,7 +141,7 @@ const RequestsList = () => {
       setRequests(filteredRequests);
     } catch (error) {
       toast.error("Erreur lors du chargement des demandes");
-      console.error("Requests error:", error);
+      // console.error("Requests error:", error);
     } finally {
       setLoading(false);
     }

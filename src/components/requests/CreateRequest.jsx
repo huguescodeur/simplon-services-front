@@ -175,10 +175,10 @@ const CreateRequest = () => {
           );
 
           if (failedUploads.length > 0) {
-            console.error(
-              "Erreurs upload:",
-              failedUploads.map((f) => f.reason)
-            );
+            // console.error(
+            //   "Erreurs upload:",
+            //   failedUploads.map((f) => f.reason)
+            // );
             toast.warning(
               `Demande créée avec succès. ${successfulUploads.length} fichier(s) ajouté(s), ${failedUploads.length} échec(s)`
             );
@@ -188,7 +188,7 @@ const CreateRequest = () => {
             );
           }
         } catch (uploadError) {
-          console.error("Erreur upload fichiers:", uploadError);
+          // console.error("Erreur upload fichiers:", uploadError);
           toast.warning(
             "Demande créée mais erreur lors de l'upload de certains fichiers"
           );
@@ -210,7 +210,7 @@ const CreateRequest = () => {
       // Rediriger vers le détail de la demande créée
       navigate(`/requests/${requestId}`);
     } catch (error) {
-      console.error("Erreur lors de la création:", error);
+      // console.error("Erreur lors de la création:", error);
 
       if (error.response?.data) {
         // Erreurs de validation du serveur

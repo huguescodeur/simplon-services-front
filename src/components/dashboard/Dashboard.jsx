@@ -27,11 +27,11 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const response = await dashboardAPI.getDashboard();
-      console.log("Dashboard response:", response.data);
+      // console.log("Dashboard response:", response.data);
       setDashboardData(response.data);
     } catch (error) {
       toast.error("Erreur lors du chargement du dashboard");
-      console.error("Dashboard error:", error);
+      // console.error("Dashboard error:", error);
     } finally {
       setLoading(false);
     }

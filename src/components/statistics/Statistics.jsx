@@ -48,7 +48,7 @@ const Statistics = () => {
       setStatsData(response.data);
     } catch (error) {
       toast.error("Erreur lors du chargement des statistiques");
-      console.error("Statistics error:", error);
+      // console.error("Statistics error:", error);
     } finally {
       setLoading(false);
     }
@@ -100,7 +100,7 @@ const Statistics = () => {
     };
   };
 
-  console.log("Stats Data", statsData);
+  // console.log("Stats Data", statsData);
 
   const getPeriodRequests = (period, offset = 0) => {
     if (!statsData?.all_requests) return [];
@@ -148,10 +148,10 @@ const Statistics = () => {
       }
     }
 
-    console.log("Stats Data", statsData);
+    // console.log("Stats Data", statsData);
 
     return statsData.all_requests.filter((req) => {
-      console.log("Stats Data req", req);
+      // console.log("Stats Data req", req);
       const reqDate = new Date(req.created_at);
       return reqDate >= startDate && reqDate <= endDate;
     });
@@ -367,7 +367,7 @@ const Statistics = () => {
     const departmentGroups = statsData.all_requests.reduce((acc, req) => {
       let deptName = "Autres services";
 
-      console.log("Request Department:", JSON.stringify(req, null, 2));
+      // console.log("Request Department:", JSON.stringify(req, null, 2));
 
       if (req.user?.department) {
         deptName =
