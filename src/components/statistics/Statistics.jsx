@@ -528,7 +528,8 @@ const Statistics = () => {
     <div className="space-y-6">
       {/* Header avec filtres */}
       <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          {/* Partie gauche : Titre + sous-titre + accès */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
               {getRoleSpecificTitle()}
@@ -544,7 +545,9 @@ const Statistics = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
+
+          {/* Partie droite : Filtres + Boutons */}
+          <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center space-x-2">
               <Filter className="h-4 w-4 text-gray-500" />
               <select
@@ -589,7 +592,6 @@ const Statistics = () => {
               </div>
             )}
 
-            {/* Bouton Export Excel */}
             <button
               onClick={handleOpenExcelExport}
               className="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 transition-colors cursor-pointer flex items-center"
