@@ -60,12 +60,12 @@ const Navbar = () => {
       icon: CheckSquare,
       allowedRoles: ["mg", "accounting", "director"],
     },
-    // {
-    //   name: "Statistiques",
-    //   href: "/statistics",
-    //   icon: BarChart3,
-    //   allowedRoles: ["mg", "accounting", "director"],
-    // },
+    {
+      name: "Statistiques",
+      href: "/statistics",
+      icon: BarChart3,
+      allowedRoles: ["mg", "director"],
+    },
   ];
 
   const filteredNavigation = navigation.filter((item) =>

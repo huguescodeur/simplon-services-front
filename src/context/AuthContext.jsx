@@ -142,7 +142,7 @@ export const AuthProvider = ({ children }) => {
 
         return { success: true, message: response.data.message };
       } catch (authError) {
-        // console.error("✗ getCurrentUser échouée:", authError);
+        console.error("✗ getCurrentUser échouée:", authError);
         dispatch({
           type: "LOGIN_ERROR",
           payload: "Échec de l'authentification",
