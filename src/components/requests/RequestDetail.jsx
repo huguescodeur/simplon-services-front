@@ -34,6 +34,8 @@ const RequestDetail = () => {
   // NOUVEAU: État pour gérer les fichiers en attente lors de la validation MG
   const [pendingValidationFiles, setPendingValidationFiles] = useState([]);
 
+  const [mgFinalCost, setMgFinalCost] = useState("");
+
   useEffect(() => {
     fetchRequestDetail();
   }, [id]);
@@ -45,6 +47,7 @@ const RequestDetail = () => {
       setLoading(true);
       const response = await requestsAPI.getRequest(id);
       setRequest(response.data);
+      setMgFinalCost("");
     } catch (error) {
       toast.error("Erreur lors du chargement de la demande");
       // console.error("Request detail error:", error);
@@ -65,7 +68,6 @@ const RequestDetail = () => {
 
   const canEditRejection = () => {
     if (!request || request.status !== "rejected") return false;
-    // Seule la personne qui a refusé peut modifier
     if (user?.role === "mg" && request.rejected_by_role === "mg") return true;
     if (
       user?.role === "accounting" &&
@@ -77,64 +79,9 @@ const RequestDetail = () => {
     return false;
   };
 
-  // NOUVELLE FONCTION: Gérer les fichiers en attente lors de la validation MG
   const handlePendingFilesChange = (files) => {
     setPendingValidationFiles(files);
   };
-
-  // const handleValidation = async (action) => {
-  //   if (action === "reject") {
-  //     setShowRejectModal(true);
-  //     return;
-  //   }
-
-  //   // Si c'est la comptabilité qui valide, on a besoin d'infos supplémentaires
-  //   if (user?.role === "accounting" && action === "approve") {
-  //     setShowAccountingModal(true);
-  //     return;
-  //   }
-
-  //   try {
-  //     // MODIFICATION: Si c'est le MG qui valide et qu'il y a des fichiers en attente
-  //     let validationData = { action };
-
-  //     if (user?.role === "mg" && pendingValidationFiles.length > 0) {
-  //       // Préparer les fichiers pour l'upload
-  //       const filesToUpload = pendingValidationFiles.map((pendingFile) => {
-  //         console.log("Processing pending file for validation:", {
-  //           name: pendingFile.name,
-  //           size: pendingFile.size,
-  //           type: pendingFile.type,
-  //           fileInstance: pendingFile.file instanceof File,
-  //         });
-
-  //         return {
-  //           file: pendingFile.file,
-  //           description: pendingFile.description || pendingFile.name,
-  //           file_type: "other",
-  //         };
-  //       });
-
-  //       validationData.files = filesToUpload;
-
-  //       // Informer l'utilisateur que des fichiers vont être uploadés
-  //       toast.info(
-  //         `Validation en cours... Upload de ${filesToUpload.length} fichier(s)`
-  //       );
-  //     }
-
-  //     await requestsAPI.validateRequest(id, validationData);
-  //     toast.success("Demande validée avec succès");
-
-  //     // Réinitialiser les fichiers en attente
-  //     setPendingValidationFiles([]);
-
-  //     fetchRequestDetail();
-  //   } catch (error) {
-  //     toast.error("Erreur lors de la validation");
-  //     console.error("Validation error:", error);
-  //   }
-  // };
 
   const handleValidation = async (action) => {
     if (action === "reject") {
@@ -142,17 +89,22 @@ const RequestDetail = () => {
       return;
     }
 
-    // Si c'est la comptabilité qui valide, on a besoin d'infos supplémentaires
     if (user?.role === "accounting" && action === "approve") {
       setShowAccountingModal(true);
       return;
     }
 
     try {
-      // MODIFICATION: Séparer la validation et l'upload des fichiers comme dans CreateRequest
       let validationData = { action };
 
-      // D'abord, valider la demande
+      if (
+        user?.role === "mg" &&
+        action === "approve" &&
+        mgFinalCost.trim() !== ""
+      ) {
+        validationData.final_cost = parseFloat(mgFinalCost);
+      }
+
       await requestsAPI.validateRequest(id, validationData);
 
       // PUIS, si c'est le MG qui valide et qu'il y a des fichiers en attente, les uploader séparément
@@ -162,7 +114,6 @@ const RequestDetail = () => {
         );
 
         try {
-          // Upload chaque fichier individuellement comme dans CreateRequest
           const uploadResults = await Promise.allSettled(
             pendingValidationFiles.map(async (pendingFile) => {
               if (!pendingFile.file) {
@@ -179,9 +130,8 @@ const RequestDetail = () => {
                 type: pendingFile.file.type,
               });
 
-              // Utiliser la même méthode que CreateRequest
               return await attachmentsAPI.uploadAttachment({
-                request: parseInt(id), // S'assurer que c'est un number
+                request: parseInt(id),
                 file: pendingFile.file,
                 file_type: "other",
                 description:
@@ -223,10 +173,8 @@ const RequestDetail = () => {
         toast.success("Demande validée avec succès");
       }
 
-      // Réinitialiser les fichiers en attente
       setPendingValidationFiles([]);
 
-      // Recharger les détails de la demande
       fetchRequestDetail();
     } catch (error) {
       toast.error("Erreur lors de la validation");
@@ -440,6 +388,22 @@ const RequestDetail = () => {
         </div>
       )}
 
+      {user?.role === "mg" && request.status === "pending" && (
+        <div className="mt-3">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Saisir un montant final (optionnel)
+          </label>
+          <input
+            type="number"
+            min="0"
+            value={mgFinalCost}
+            onChange={(e) => setMgFinalCost(e.target.value)}
+            placeholder="Ex : 2400"
+            className="border rounded-md px-3 py-2 w-full max-w-xs"
+          />
+        </div>
+      )}
+
       {/* Contenu principal */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Détails de la demande */}
@@ -473,7 +437,24 @@ const RequestDetail = () => {
               </div>
 
               {/* Afficher le coût final si disponible */}
-              {request.final_cost && (
+              {(mgFinalCost.trim() !== "" || request.final_cost) && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Coût final validé
+                  </label>
+                  <p className="text-sm text-gray-900 font-semibold text-green-600">
+                    {new Intl.NumberFormat("fr-FR", {
+                      style: "currency",
+                      currency: "XOF",
+                    }).format(
+                      mgFinalCost.trim() !== ""
+                        ? parseFloat(mgFinalCost)
+                        : request.final_cost
+                    )}
+                  </p>
+                </div>
+              )}
+              {/* {request.final_cost && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Coût final validé
@@ -485,7 +466,7 @@ const RequestDetail = () => {
                     }).format(request.final_cost)}
                   </p>
                 </div>
-              )}
+              )} */}
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
