@@ -27,7 +27,7 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const response = await dashboardAPI.getDashboard();
-      // console.log("Dashboard response:", response.data);
+      console.log("Dashboard response:", response.data);
       setDashboardData(response.data);
     } catch (error) {
       toast.error("Erreur lors du chargement du dashboard");
@@ -695,12 +695,23 @@ const Dashboard = () => {
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {new Intl.NumberFormat("fr-FR", {
                             style: "currency",
                             currency: "XOF",
                           }).format(request.estimated_cost || 0)}
+                        </td> */}
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {new Intl.NumberFormat("fr-FR", {
+                            style: "currency",
+                            currency: "XOF",
+                          }).format(
+                            request.final_cost != null
+                              ? request.final_cost
+                              : request.estimated_cost || 0
+                          )}
                         </td>
+
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <div className="flex items-center">
                             <Calendar className="h-4 w-4 mr-1" />
