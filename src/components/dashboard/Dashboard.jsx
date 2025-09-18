@@ -579,7 +579,11 @@ const Dashboard = () => {
                               {new Intl.NumberFormat("fr-FR", {
                                 style: "currency",
                                 currency: "XOF",
-                              }).format(request.estimated_cost || 0)}
+                              }).format(
+                                request.final_cost != null
+                                  ? request.final_cost
+                                  : request.estimated_cost || 0
+                              )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               <div className="flex items-center">
