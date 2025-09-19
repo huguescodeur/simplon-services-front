@@ -168,8 +168,12 @@ const Statistics = () => {
       (req) => req.status === "rejected"
     );
 
+    // const totalAmount = approvedRequests.reduce((sum, req) => {
+    //   return sum + (parseFloat(req.estimated_cost) || 0);
+    // }, 0);
+
     const totalAmount = approvedRequests.reduce((sum, req) => {
-      return sum + (parseFloat(req.estimated_cost) || 0);
+      return sum + parseFloat(req.final_cost || req.estimated_cost || 0);
     }, 0);
 
     return {
@@ -421,9 +425,17 @@ const Statistics = () => {
         );
       });
 
+      // const monthlyAmount = monthRequests
+      //   .filter((req) => req.status === "director_approved")
+      //   .reduce((sum, req) => sum + (parseFloat(req.estimated_cost) || 0), 0);
+
       const monthlyAmount = monthRequests
         .filter((req) => req.status === "director_approved")
-        .reduce((sum, req) => sum + (parseFloat(req.estimated_cost) || 0), 0);
+        .reduce(
+          (sum, req) =>
+            sum + parseFloat(req.final_cost || req.estimated_cost || 0),
+          0
+        );
 
       months.push({
         month: tempDate.toLocaleDateString("fr-FR", {
@@ -523,6 +535,8 @@ const Statistics = () => {
   const monthlyTrend = getMonthlyTrend();
   const totals = calculateTotalsByPeriod();
   const departmentStats = getDepartmentStats();
+
+  console.log("Totals", totals);
 
   return (
     <div className="space-y-6">
