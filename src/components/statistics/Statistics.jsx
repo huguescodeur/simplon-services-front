@@ -100,7 +100,7 @@ const Statistics = () => {
     };
   };
 
-  // console.log("Stats Data", statsData);
+  console.log("Stats Data", statsData);
 
   const getPeriodRequests = (period, offset = 0) => {
     if (!statsData?.all_requests) return [];
@@ -148,10 +148,10 @@ const Statistics = () => {
       }
     }
 
-    // console.log("Stats Data", statsData);
+    console.log("Stats Data", statsData);
 
     return statsData.all_requests.filter((req) => {
-      // console.log("Stats Data req", req);
+      console.log("Stats Data req", req);
       const reqDate = new Date(req.created_at);
       return reqDate >= startDate && reqDate <= endDate;
     });
