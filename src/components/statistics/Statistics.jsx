@@ -100,7 +100,7 @@ const Statistics = () => {
     };
   };
 
-  console.log("Stats Data", statsData);
+  // console.log("Stats Data", statsData);
 
   const getPeriodRequests = (period, offset = 0) => {
     if (!statsData?.all_requests) return [];
@@ -148,10 +148,10 @@ const Statistics = () => {
       }
     }
 
-    console.log("Stats Data", statsData);
+    // console.log("Stats Data", statsData);
 
     return statsData.all_requests.filter((req) => {
-      console.log("Stats Data req", req);
+      // console.log("Stats Data req", req);
       const reqDate = new Date(req.created_at);
       return reqDate >= startDate && reqDate <= endDate;
     });
@@ -167,10 +167,6 @@ const Statistics = () => {
     const rejectedRequests = allPeriodRequests.filter(
       (req) => req.status === "rejected"
     );
-
-    // const totalAmount = approvedRequests.reduce((sum, req) => {
-    //   return sum + (parseFloat(req.estimated_cost) || 0);
-    // }, 0);
 
     const totalAmount = approvedRequests.reduce((sum, req) => {
       return sum + parseFloat(req.final_cost || req.estimated_cost || 0);
@@ -425,10 +421,6 @@ const Statistics = () => {
         );
       });
 
-      // const monthlyAmount = monthRequests
-      //   .filter((req) => req.status === "director_approved")
-      //   .reduce((sum, req) => sum + (parseFloat(req.estimated_cost) || 0), 0);
-
       const monthlyAmount = monthRequests
         .filter((req) => req.status === "director_approved")
         .reduce(
@@ -536,7 +528,7 @@ const Statistics = () => {
   const totals = calculateTotalsByPeriod();
   const departmentStats = getDepartmentStats();
 
-  console.log("Totals", totals);
+  // console.log("Totals", totals);
 
   return (
     <div className="space-y-6">
